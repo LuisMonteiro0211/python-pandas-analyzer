@@ -17,22 +17,29 @@ Projeto em evolução para automatizar o processamento de planilhas Excel. Ele a
 ## Instalação
 
 1. Clone o repositório:
+
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone <https://github.com/LuisMonteiro0211/python-pandas-analyzer>
 ```
+
 2. Instale as dependências:
+
 ```bash
 pip install -r requirements.txt
 ```
+
 ## Rodar o Projeto
+
 ```bash
 python main.py
 ```
+
 Os demais módulos (helpers, models, services) são utilizados pelo main.py.
 
 Comentários nos scripts explicam o funcionamento dos filtros aplicados.
 
 ## Estrutura do Projeto
+
 ```text
 python-pandas-analyzer/
 ├─ main.py
