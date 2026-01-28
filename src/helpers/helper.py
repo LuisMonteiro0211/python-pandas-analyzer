@@ -1,6 +1,6 @@
 import pandas as pd
 from typing import List
-from models.filtro import Filtro
+from src.models.filtro import Filtro
 
 dataframe = pd.read_excel('./dados_ficticios_2025.xlsx')
 
