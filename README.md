@@ -43,11 +43,19 @@ Comentários nos scripts explicam o funcionamento dos filtros aplicados.
 ```text
 python-pandas-analyzer/
 ├─ main.py
-├─ helpers/
-├─ models/
-├─ services/
-├─ planilha_teste.xlsx
-├─ requirements.txt
+├─ dados_ficticios_2025.xlsx
+├─ src/
+│  ├─ helpers/
+│  │  ├─ __init__.py
+│  │  └─ helper.py
+│  ├─ models/
+│  │  ├─ __init__.py
+│  │  └─ filtro.py
+│  └─ services/
+│     ├─ __init__.py
+│     └─ service.py
+├─ README.md
+└─ requirements.txt
 ```
 
 ## Próximos Passos / Evolução
