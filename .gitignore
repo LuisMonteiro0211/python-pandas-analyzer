@@ -70,3 +70,6 @@ coverage.xml
 # Excel temporários
 ~$*.xlsx
 *.xlsm
+
+# Relatorio final
+relatorio_final/
