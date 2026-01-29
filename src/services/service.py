@@ -2,6 +2,19 @@ from src.helpers.helper import get_dataframe, get_colunas, check_colunas, get_se
 from src.models.filtro import Filtro
 
 def process_spreadsheet(path: str) -> None:
+    """
+    Processa a planilha aplicando filtros por setor e turno, e retorna a quantidade de dados filtrados.
+
+    Fluxo de execução:
+    1. Obtém o dataframe a partir do caminho da planilha
+    2. Verifica se as colunas necessárias estão presentes
+    3. Obtém os setores
+    4. Para cada setor, obtém os turnos
+    5. Para cada turno, obtém os dados
+
+    Args:
+        path: Caminho da planilha
+    """
     ##Adicona a planilha em memória
     #TODO: Adicionar tratamento de erro para caso a planilha não seja encontrada
     df = get_dataframe(path)
