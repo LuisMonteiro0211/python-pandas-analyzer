@@ -1,4 +1,3 @@
-from nt import DirEntry
 import pandas as pd
 from typing import List
 from src.models.filtro import Filtro
