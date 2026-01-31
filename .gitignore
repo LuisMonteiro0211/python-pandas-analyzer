@@ -69,6 +69,7 @@ coverage.xml
 
 # Excel temporários
 ~$*.xlsx
+*lock.dados_ficticios_2025.xlsx#
 *.xlsm
 
 # Relatorio final

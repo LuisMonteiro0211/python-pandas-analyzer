@@ -1,5 +1,7 @@
-from src.helpers.helper import get_dataframe, get_colunas, check_colunas, get_setores, applying_filters, get_turnos
+from src.helpers.helper import get_dataframe, get_colunas, check_colunas, get_setores, applying_filters, get_turnos, export_to_excel
 from src.models.filtro import Filtro
+from src.models.export import Export
+from datetime import datetime
 
 def process_spreadsheet(path: str) -> None:
     """
@@ -30,12 +32,21 @@ def process_spreadsheet(path: str) -> None:
     for setor in setores:
         filtro_setor = Filtro(coluna='Setor', dataframe=df, valor=setor)
         df_setor = applying_filters(filtro_setor)
-        #print(df_setor.shape)
+
         ##Obtendo os turnos
         turnos = get_turnos(df_setor)
+
         for turno in turnos:
             filtro_turno = Filtro(coluna='Turno', dataframe=df_setor, valor=turno)
             df_turno = applying_filters(filtro_turno)
+
+            object_to_export = Export(
+                dataframe= df_turno,
+                diretorio= f"/home/luismonteiro/Documentos/Relatorios_pandas/Relatorio_{setor}_{turno}_{datetime.now().strftime('%d_%m_%Y')}.xlsx",
+                nome_pasta= f"{setor}_{turno}"
+            )
+            export_to_excel(object_to_export)
+
             print(f"Setor: {setor}, Turno: {turno}, Quantidade: {df_turno.shape[0]}")
 
         

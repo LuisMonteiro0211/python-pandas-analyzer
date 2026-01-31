@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import pandas as pd
-
+from typing import Optional
 @dataclass
 class Filtro:
     """
@@ -13,4 +13,4 @@ class Filtro:
     
     coluna: str
     dataframe: pd.DataFrame
-    valor: str
+    valor: str    

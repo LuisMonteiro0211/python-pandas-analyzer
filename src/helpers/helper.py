@@ -1,6 +1,8 @@
+from nt import DirEntry
 import pandas as pd
 from typing import List
 from src.models.filtro import Filtro
+from src.models.export import Export
 
 dataframe = pd.read_excel('./dados_ficticios_2025.xlsx')
 
@@ -74,6 +76,10 @@ def applying_filters(filtro: Filtro) -> pd.DataFrame:
         pd.DataFrame: DataFrame com os dados filtrados
     """
     return filtro.dataframe[filtro.dataframe[filtro.coluna] == filtro.valor]
+
+def export_to_excel(object_to_export: Export) -> None:
+    diretorio: str = object_to_export.diretorio
+    object_to_export.dataframe.to_excel(diretorio, index=False, sheet_name=object_to_export.nome_pasta)
 
 if __name__ == "__main__":
     print(applying_filters(dataframe, 'Produção'))
