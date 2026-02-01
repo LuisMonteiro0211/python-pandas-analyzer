@@ -5,9 +5,6 @@ from datetime import datetime
 import os
 from pathlib import Path
 
-
-DIRETORIO_EXPORT = Path(os.getenv('DIRETORIO_EXPORT'))
-
 def process_spreadsheet(path: Path) -> None:
     """
     Processa a planilha aplicando filtros por setor e turno, e retorna a quantidade de dados filtrados.
@@ -22,6 +19,9 @@ def process_spreadsheet(path: Path) -> None:
     Args:
         path: Caminho da planilha
     """
+    ##Carrega o diretório de exportação após o .env ter sido lido
+    DIRETORIO_EXPORT = Path(os.getenv('DIRETORIO_EXPORT'))
+
     ##Adicona a planilha em memória
     #TODO: Adicionar tratamento de erro para caso a planilha não seja encontrada
     df = get_dataframe(path)
