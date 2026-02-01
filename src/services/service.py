@@ -2,8 +2,13 @@ from src.helpers.helper import get_dataframe, get_colunas, check_colunas, get_se
 from src.models.filtro import Filtro
 from src.models.export import Export
 from datetime import datetime
+import os
+from pathlib import Path
 
-def process_spreadsheet(path: str) -> None:
+
+DIRETORIO_EXPORT = Path(os.getenv('DIRETORIO_EXPORT'))
+
+def process_spreadsheet(path: Path) -> None:
     """
     Processa a planilha aplicando filtros por setor e turno, e retorna a quantidade de dados filtrados.
 
@@ -42,7 +47,8 @@ def process_spreadsheet(path: str) -> None:
 
             object_to_export = Export(
                 dataframe= df_turno,
-                diretorio= f"/home/luismonteiro/Documentos/Relatorios_pandas/Relatorio_{setor}_{turno}_{datetime.now().strftime('%d_%m_%Y')}.xlsx",
+                diretorio=DIRETORIO_EXPORT,
+                nome_arquivo= f"Relatorio_{setor}_{turno}_{datetime.now().strftime('%d_%m_%Y')}.xlsx",
                 nome_pasta= f"{setor}_{turno}"
             )
             export_to_excel(object_to_export)
