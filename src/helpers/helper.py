@@ -2,8 +2,7 @@ import pandas as pd
 from typing import List
 from src.models.filtro import Filtro
 from src.models.export import Export
-
-dataframe = pd.read_excel('./dados_ficticios_2025.xlsx')
+from pathlib import Path
 
 def get_dataframe(path: str) -> pd.DataFrame:
     """
@@ -77,10 +76,19 @@ def applying_filters(filtro: Filtro) -> pd.DataFrame:
     return filtro.dataframe[filtro.dataframe[filtro.coluna] == filtro.valor]
 
 def export_to_excel(object_to_export: Export) -> None:
-    diretorio: str = object_to_export.diretorio
-    object_to_export.dataframe.to_excel(diretorio, index=False, sheet_name=object_to_export.nome_pasta)
+    """
+    Função para exportar o dataframe para um arquivo Excel
+    Args:
+        object_to_export: Objeto Export com o dataframe, diretório, nome do arquivo e nome da pasta
+    Returns:
+        None
+    """
+    diretorio: Path = object_to_export.diretorio
+    object_to_export.dataframe.to_excel(diretorio / object_to_export.nome_arquivo, index=False, sheet_name=object_to_export.nome_pasta)
 
 if __name__ == "__main__":
+
+    dataframe = pd.read_excel('./dados_ficticios_2025.xlsx')
     print(applying_filters(dataframe, 'Produção'))
     df_producao = applying_filters(dataframe, 'Produção')
     print(df_producao.shape)
