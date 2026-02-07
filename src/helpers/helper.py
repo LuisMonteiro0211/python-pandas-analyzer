@@ -89,6 +89,10 @@ def export_to_excel(object_to_export: Export) -> None:
     Returns:
         None
     """
+    ##Cria a pasta de exportação se não existir
+    if not object_to_export.diretorio.exists():
+        object_to_export.diretorio.mkdir(parents=True, exist_ok=True)
+
     diretorio: Path = object_to_export.diretorio
     object_to_export.dataframe.to_excel(diretorio / object_to_export.nome_arquivo, index=False, sheet_name=object_to_export.nome_pasta)
 
