@@ -13,8 +13,14 @@ def get_dataframe(path: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame com os dados da planilha
     """
-    dataframe = pd.read_excel(path)
-    return dataframe
+    if not Path(path).is_file():
+        raise FileNotFoundError(f"Arquivo {path} não encontrado")
+    
+    try:
+        df = pd.read_excel(path)
+        return df
+    except Exception as e:
+        raise ValueError(f"Erro ao ler o arquivo {path}: {e}")
 
 def get_colunas(dataframe: pd.DataFrame) -> List[str]:
     """

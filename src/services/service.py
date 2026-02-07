@@ -23,8 +23,15 @@ def process_spreadsheet(path: Path) -> None:
     DIRETORIO_EXPORT = Path(os.getenv('DIRETORIO_EXPORT'))
 
     ##Adicona a planilha em memória
-    #TODO: Adicionar tratamento de erro para caso a planilha não seja encontrada
-    df = get_dataframe(path)
+    try:
+        df = get_dataframe(path)
+        
+    except FileNotFoundError as e:
+        print(f"Erro ao ler o arquivo {path}: {e}")
+        return
+    except ValueError as e:
+        print(f"Erro ao ler o arquivo {path}: {e}")
+        return
 
     ##Verifica se as colunas necessárias estão presentes
     colunas = get_colunas(df)
