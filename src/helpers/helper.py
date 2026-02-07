@@ -3,6 +3,7 @@ from typing import List
 from src.models.filtro import Filtro
 from src.models.export import Export
 from pathlib import Path
+from os import getenv
 
 def get_dataframe(path: str) -> pd.DataFrame:
     """
@@ -95,6 +96,19 @@ def export_to_excel(object_to_export: Export) -> None:
 
     diretorio: Path = object_to_export.diretorio
     object_to_export.dataframe.to_excel(diretorio / object_to_export.nome_arquivo, index=False, sheet_name=object_to_export.nome_pasta)
+
+def check_environment_variables(environment_variable: str) -> None:
+    """
+    Função para verificar se a variável de ambiente existe
+    Args:
+        environment_variable: Variável de ambiente a ser verificada
+    Returns:
+        None (Se a variável de ambiente não existir, uma exceção é lançada)
+    """
+
+    if not getenv(environment_variable):
+        raise ValueError(f"Variável de ambiente {environment_variable} não encontrada")
+    return getenv(environment_variable)
 
 if __name__ == "__main__":
 
