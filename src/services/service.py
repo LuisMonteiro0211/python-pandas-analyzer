@@ -33,31 +33,34 @@ def process_spreadsheet(path: Path) -> None:
     colunas = get_colunas(df)
     try:
         check_colunas(colunas, 'Setor')
+        logger.info(f"Coluna 'Setor' encontrada")
         check_colunas(colunas, 'Turno')
+        logger.info(f"Coluna 'Turno' encontrada")
     except ValueError as e:
         logger.error(f"{e}")
         return
 
     ##Obtém os setores
     setores = get_setores(df)
-
+    logger.info(f"Obtendo os setores")
     for setor in setores:
         filtro_setor = Filtro(coluna='Setor', dataframe=df, valor=setor)
         df_setor = applying_filters(filtro_setor)
 
         ##Obtendo os turnos
         turnos = get_turnos(df_setor)
-
+        logger.info(f"Obtendo os turnos")
         for turno in turnos:
             filtro_turno = Filtro(coluna='Turno', dataframe=df_setor, valor=turno)
             df_turno = applying_filters(filtro_turno)
-
+            logger.info(f"Aplicando filtros para o turno {turno}")
             object_to_export = Export(
                 dataframe= df_turno,
                 diretorio=Path(getenv('DIRETORIO_EXPORT')),
                 nome_arquivo= f"Relatorio_{setor}_{turno}_{datetime.now().strftime('%d_%m_%Y')}.xlsx",
                 nome_pasta= f"{setor}_{turno}"
             )
+            logger.info(f"Exportando o relatório para o setor {setor} e turno {turno}")
             export_to_excel(object_to_export)
 
             logger.info(f"Setor: {setor}, Turno: {turno}, Quantidade: {df_turno.shape[0]}")
