@@ -90,14 +90,11 @@ def export_to_excel(object_to_export: Export) -> None:
     Returns:
         None
     """
-    ##Cria a pasta de exportação se não existir
-    if not object_to_export.diretorio.exists():
-        object_to_export.diretorio.mkdir(parents=True, exist_ok=True)
 
     diretorio: Path = object_to_export.diretorio
     object_to_export.dataframe.to_excel(diretorio / object_to_export.nome_arquivo, index=False, sheet_name=object_to_export.nome_pasta)
 
-def check_environment_variables(environment_variable: str) -> None:
+def check_environment_variables(list_of_variables: List[str]) -> None:
     """
     Função para verificar se a variável de ambiente existe
     Args:
@@ -105,14 +102,14 @@ def check_environment_variables(environment_variable: str) -> None:
     Returns:
         None (Se a variável de ambiente não existir, uma exceção é lançada)
     """
+    list_of_variables_found = []
 
-    if not getenv(environment_variable):
-        raise ValueError(f"Variável de ambiente {environment_variable} não encontrada")
-    return getenv(environment_variable)
+    for variable in list_of_variables:
+        if not getenv(variable):
+            list_of_variables_found.append(variable)
+
+    if len(list_of_variables_found) > 0:
+        raise ValueError(f"Variáveis de ambiente não encontradas: {', '.join(list_of_variables_found)}")
 
 if __name__ == "__main__":
-
-    dataframe = pd.read_excel('./dados_ficticios_2025.xlsx')
-    print(applying_filters(dataframe, 'Produção'))
-    df_producao = applying_filters(dataframe, 'Produção')
-    print(df_producao.shape)
+    pass

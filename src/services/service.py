@@ -1,8 +1,8 @@
-from src.helpers.helper import get_dataframe, get_colunas, check_colunas, get_setores, applying_filters, get_turnos, export_to_excel
+from src.helpers.helper import get_dataframe, get_colunas, check_colunas, get_setores, applying_filters, get_turnos, export_to_excel, check_environment_variables
 from src.models.filtro import Filtro
 from src.models.export import Export
 from datetime import datetime
-import os
+from os import getenv
 from pathlib import Path
 
 def process_spreadsheet(path: Path) -> None:
@@ -19,24 +19,16 @@ def process_spreadsheet(path: Path) -> None:
     Args:
         path: Caminho da planilha
     """
-    ##Carrega o diretório de exportação após o .env ter sido lido
-    DIRETORIO_EXPORT = Path(os.getenv('DIRETORIO_EXPORT'))
-
-    ##Adicona a planilha em memória
-    try:
-        df = get_dataframe(path)
-        
-    except FileNotFoundError as e:
-        print(f"Erro ao ler o arquivo {path}: {e}")
-        return
-    except ValueError as e:
-        print(f"Erro ao ler o arquivo {path}: {e}")
-        return
+    df = get_dataframe(path)
 
     ##Verifica se as colunas necessárias estão presentes
     colunas = get_colunas(df)
-    check_colunas(colunas, 'Setor')
-    check_colunas(colunas, 'Turno')
+    try:
+        check_colunas(colunas, 'Setor')
+        check_colunas(colunas, 'Turno')
+    except ValueError as e:
+        raise ValueError(f"Planilha inválida: {e}")
+        return
 
     ##Obtém os setores
     setores = get_setores(df)
@@ -54,7 +46,7 @@ def process_spreadsheet(path: Path) -> None:
 
             object_to_export = Export(
                 dataframe= df_turno,
-                diretorio=DIRETORIO_EXPORT,
+                diretorio=Path(getenv('DIRETORIO_EXPORT')),
                 nome_arquivo= f"Relatorio_{setor}_{turno}_{datetime.now().strftime('%d_%m_%Y')}.xlsx",
                 nome_pasta= f"{setor}_{turno}"
             )
