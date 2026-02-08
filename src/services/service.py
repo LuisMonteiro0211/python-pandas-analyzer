@@ -4,6 +4,7 @@ from src.models.export import Export
 from datetime import datetime
 from os import getenv
 from pathlib import Path
+import logging as lg
 
 def process_spreadsheet(path: Path) -> None:
     """
@@ -19,7 +20,14 @@ def process_spreadsheet(path: Path) -> None:
     Args:
         path: Caminho da planilha
     """
-    df = get_dataframe(path)
+    logger = lg.getLogger(__name__)
+
+    try:
+        df = get_dataframe(path)
+    except (ValueError, FileNotFoundError) as e:
+        logger.error(f"{e}")
+        return
+
 
     ##Verifica se as colunas necessárias estão presentes
     colunas = get_colunas(df)
@@ -27,7 +35,7 @@ def process_spreadsheet(path: Path) -> None:
         check_colunas(colunas, 'Setor')
         check_colunas(colunas, 'Turno')
     except ValueError as e:
-        raise ValueError(f"Planilha inválida: {e}")
+        logger.error(f"{e}")
         return
 
     ##Obtém os setores
@@ -52,9 +60,9 @@ def process_spreadsheet(path: Path) -> None:
             )
             export_to_excel(object_to_export)
 
-            print(f"Setor: {setor}, Turno: {turno}, Quantidade: {df_turno.shape[0]}")
+            logger.info(f"Setor: {setor}, Turno: {turno}, Quantidade: {df_turno.shape[0]}")
 
-        
+    logger.info(f"Processo finalizado com sucesso")
 
 
 if __name__ == "__main__":
