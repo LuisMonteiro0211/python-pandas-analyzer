@@ -8,6 +8,8 @@ Projeto em evolução para automatizar o processamento de planilhas Excel. Ele a
 - Geração de arquivos menores com base em critérios (setor, turno, etc.).
 - Estrutura organizada em MVC simples com `helpers`, `models` e `services`.
 - Planilha de teste incluída para facilitar o clone e testes rápidos.
+- Validação de pré-requisitos (variáveis de ambiente, caminhos e permissões) antes de iniciar o processamento.
+- Registro de logs em arquivo.
 
 ## Pré-requisitos
 
@@ -36,16 +38,17 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-2. Edite o `.env` com os caminhos da planilha e da pasta de exportação:
+2. Edite o `.env` com os caminhos da planilha, da pasta de exportação e da pasta de logs:
 
 ```env
 DIRETORIO_PLANILHA=./dados_ficticios_2025.xlsx
 DIRETORIO_EXPORT=./exports
+DIRETORIO_LOG=./logs
 ```
 
 Notas:
 - Você pode usar caminhos absolutos ou relativos.
-- Garanta que a pasta de exportação exista antes de executar.
+- Garanta que as pastas de exportação e de logs existam antes de executar (e que você tenha permissão de escrita).
 
 ## Como usar
 
@@ -54,6 +57,10 @@ python main.py
 ```
 
 O script lê a planilha configurada em `DIRETORIO_PLANILHA`, filtra por **Setor** e **Turno**, e exporta um arquivo Excel por combinação.
+
+## Logs
+
+Os logs são gravados em `DIRETORIO_LOG/app.log`.
 
 ## Requisitos da planilha de entrada
 
@@ -79,6 +86,7 @@ python-pandas-analyzer/
    ├─ helpers/
    │  ├─ __init__.py
    │  └─ helper.py
+   │  └─ log.py
    ├─ models/
    │  ├─ __init__.py
    │  ├─ filtro.py
@@ -98,16 +106,16 @@ Relatorio_{Setor}_{Turno}_{DD_MM_YYYY}.xlsx
 
 ## Problemas comuns
 
-- `TypeError: argument should be a str or an os.PathLike object...`: variável do `.env` não definida.
-- `ValueError: Coluna 'Setor' não encontrada...`: a planilha não possui as colunas obrigatórias.
+- `Variáveis de ambiente não encontradas: ...`: falta configurar alguma variável no `.env`.
+- `Caminho informado ... não é um arquivo válido`: `DIRETORIO_PLANILHA` aponta para um caminho inválido.
+- `Caminho informado ... não é um diretório válido`: `DIRETORIO_EXPORT`/`DIRETORIO_LOG` apontam para um caminho inválido.
+- `Permissão negada para acessar o diretório ...`: pasta existe, mas sem permissão de escrita.
+- `Coluna 'Setor' não encontrada...` / `Coluna 'Turno' não encontrada...`: a planilha não possui as colunas obrigatórias.
 
 ## Próximos Passos / Evolução
 
-Implementação de funções de exportação adicionais.
-
-Tratamento de erros mais robusto.
-
-Configuração de .env para caminhos mais consistentes.
+- **Tela/Interface (futuro)**: adicionar uma interface para o usuário selecionar a planilha e o diretório de exportação via “gerenciador de arquivos” (file picker).
+- **Remover dependência de `.env` (futuro)**: substituir variáveis de ambiente por entradas do usuário na interface (caminhos/arquivos), mantendo as validações de pré-requisitos.
 
 ## Contribuição
 

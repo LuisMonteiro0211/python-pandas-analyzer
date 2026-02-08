@@ -36,6 +36,7 @@ def start():
     
     try:
         check_environment_variables(list_of_variables)
+        logger.info(f"Variáveis de ambiente carregadas com sucesso!")
     except ValueError as e:
         logger.error(f"{e}")
         return
@@ -46,6 +47,7 @@ def start():
 
     try:
         validate_paths(path_planilha, path_export, path_log)
+        logger.info(f"Caminhos e permissões validados com sucesso!")
     except (FileNotFoundError, NotADirectoryError, PermissionError) as e:
         logger.error(f"Erro ao validar o caminho: {e}")
         return
