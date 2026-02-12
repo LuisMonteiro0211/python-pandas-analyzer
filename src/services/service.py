@@ -32,10 +32,10 @@ def process_spreadsheet(path: Path) -> None:
     ##Verifica se as colunas necessárias estão presentes
     colunas = get_colunas(df)
     try:
-        check_colunas(colunas, 'Setor')
+        check_colunas(colunas, 'SETOR')
         logger.info(f"Coluna 'Setor' encontrada")
-        check_colunas(colunas, 'Turno')
-        logger.info(f"Coluna 'Turno' encontrada")
+        check_colunas(colunas, 'TURNO')
+        logger.info(f"Coluna 'TURNO' encontrada")
     except ValueError as e:
         logger.error(f"{e}")
         return
@@ -44,21 +44,21 @@ def process_spreadsheet(path: Path) -> None:
     setores = get_setores(df)
     logger.info(f"Obtendo os setores")
     for setor in setores:
-        filtro_setor = Filtro(coluna='Setor', dataframe=df, valor=setor)
+        filtro_setor = Filtro(coluna='SETOR', dataframe=df, valor=setor)
         df_setor = applying_filters(filtro_setor)
 
         ##Obtendo os turnos
         turnos = get_turnos(df_setor)
         logger.info(f"Obtendo os turnos")
         for turno in turnos:
-            filtro_turno = Filtro(coluna='Turno', dataframe=df_setor, valor=turno)
+            filtro_turno = Filtro(coluna='TURNO', dataframe=df_setor, valor=turno)
             df_turno = applying_filters(filtro_turno)
             logger.info(f"Aplicando filtros para o turno {turno}")
             object_to_export = Export(
                 dataframe= df_turno,
                 diretorio=Path(getenv('DIRETORIO_EXPORT')),
                 nome_arquivo= f"Relatorio_{setor}_{turno}_{datetime.now().strftime('%d_%m_%Y')}.xlsx",
-                nome_pasta= f"{setor}_{turno}"
+                nome_pasta= f"{setor}"
             )
             logger.info(f"Exportando o relatório para o setor {setor} e turno {turno}")
             export_to_excel(object_to_export)
@@ -69,4 +69,4 @@ def process_spreadsheet(path: Path) -> None:
 
 
 if __name__ == "__main__":
-    process_spreadsheet('./dados_ficticios_2025.xlsx')
+    pass

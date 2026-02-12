@@ -57,7 +57,7 @@ def get_setores(dataframe: pd.DataFrame) -> List[str]:
     Returns:
         List[str]: Lista com os setores do dataframe
     """
-    setores: List[str] = dataframe['Setor'].unique().tolist()
+    setores: List[str] = dataframe['SETOR'].unique().tolist()
     return setores
 
 def get_turnos(dataframe: pd.DataFrame) -> List[str]:
@@ -68,7 +68,7 @@ def get_turnos(dataframe: pd.DataFrame) -> List[str]:
     Returns:
         List[str]: Lista com os turnos do dataframe
     """
-    turnos: List[str] = dataframe['Turno'].unique().tolist()
+    turnos: List[str] = dataframe['TURNO'].unique().tolist()
     return turnos
 
 def applying_filters(filtro: Filtro) -> pd.DataFrame:
