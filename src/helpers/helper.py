@@ -3,6 +3,7 @@ from typing import List
 from src.models.filtro import Filtro
 from src.models.export import Export
 from pathlib import Path
+import re
 from os import getenv
 
 def get_dataframe(path: str) -> pd.DataFrame:
@@ -110,6 +111,16 @@ def check_environment_variables(list_of_variables: List[str]) -> None:
 
     if len(list_of_variables_found) > 0:
         raise ValueError(f"Variáveis de ambiente não encontradas: {', '.join(list_of_variables_found)}")
+
+def safe_name(text: str) -> str:
+    """
+    Função para sanitizar o nome de um arquivo
+    Args:
+        text: Texto a ser sanitizado
+    Returns:
+        str: Texto sanitizado
+    """
+    return re.sub(r'[<>:"/\\|?*]', "_", str(text)).strip()
 
 if __name__ == "__main__":
     pass

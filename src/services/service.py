@@ -1,4 +1,4 @@
-from src.helpers.helper import get_dataframe, get_colunas, check_colunas, get_setores, applying_filters, get_turnos, export_to_excel, check_environment_variables
+from src.helpers.helper import get_dataframe, get_colunas, check_colunas, get_setores, applying_filters, get_turnos, export_to_excel, check_environment_variables, safe_name
 from src.models.filtro import Filtro
 from src.models.export import Export
 from datetime import datetime
@@ -21,6 +21,7 @@ def process_spreadsheet(path: Path) -> None:
         path: Caminho da planilha
     """
     logger = lg.getLogger(__name__)
+    data_hoje = datetime.now().strftime('%d_%m')
 
     try:
         df = get_dataframe(path)
@@ -50,15 +51,18 @@ def process_spreadsheet(path: Path) -> None:
         ##Obtendo os turnos
         turnos = get_turnos(df_setor)
         logger.info(f"Obtendo os turnos")
-        for turno in turnos:
+        for i, turno in enumerate(turnos, start=1):
             filtro_turno = Filtro(coluna='TURNO', dataframe=df_setor, valor=turno)
             df_turno = applying_filters(filtro_turno)
             logger.info(f"Aplicando filtros para o turno {turno}")
+            nome_arquivo_safe = safe_name(f"{setor}_{i}_{data_hoje}.xlsx")
+            nome_pasta_safe = safe_name(setor)
+            
             object_to_export = Export(
                 dataframe= df_turno,
                 diretorio=Path(getenv('DIRETORIO_EXPORT')),
-                nome_arquivo= f"Relatorio_{setor}_{turno}_{datetime.now().strftime('%d_%m_%Y')}.xlsx",
-                nome_pasta= f"{setor}"
+                nome_arquivo= nome_arquivo_safe,
+                nome_pasta= nome_pasta_safe
             )
             logger.info(f"Exportando o relatório para o setor {setor} e turno {turno}")
             export_to_excel(object_to_export)
